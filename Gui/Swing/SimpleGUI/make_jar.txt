@@ -1,0 +1,1 @@
+jar cvfm SimpleGUI.jar example_manifest.txt  *.class
