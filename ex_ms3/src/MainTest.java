@@ -1,15 +1,12 @@
 import core.logic.models.*;
 
-public class MainTest{
-    public static void main(String args[]){
+public class MainTest {
+    public static void main(String args[]) {
 
-        Attr attr = new Attr();
-        attr.setName("igor");
+        Attr attr = new Attr(1, "first");
 
         System.out.println("MainTest!");
-        System.out.println(attr.getName());
+        System.out.println(attr.get_attr_id());
 
-        attr.name = "opa";
-        System.out.println(attr.getName());
     }
 }
