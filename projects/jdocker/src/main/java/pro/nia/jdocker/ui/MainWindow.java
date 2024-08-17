@@ -57,7 +57,7 @@ public class MainWindow extends JFrame {
 
         _containers_page = new ContainersPage(_app_controller.get_containers_controller());
         _tabs.addTab("Containers", _containers_page);
-        _tabs.addTab("Images", new ImagesPage());
+        _tabs.addTab("Images", new ImagesPage(_app_controller.get_images_controller()));
         // _tabs.addTab("Volumes", _containers_page);
         // _tabs.addTab("Networks", _containers_page);
         // _tabs.addTab("Configs", _containers_page);
