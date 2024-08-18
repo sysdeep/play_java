@@ -113,8 +113,14 @@ public class ImagesPage extends JPanel {
 
         // TODO: format
         // LocalDate date = LocalDate.now();
+        // System.out.println(date.toString());
+        // System.out.println(time.toString());
         // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
         // String text = date.format(formatter);
+        // System.out.println(text);
+
+        // DateFormat formatter = DateFormat.getDateTimeInstance();
+        // return formatter.format(this);
 
         // кривой буржуйский формат...
         return time.toString();
