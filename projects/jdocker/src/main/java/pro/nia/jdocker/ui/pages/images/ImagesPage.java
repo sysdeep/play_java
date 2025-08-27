@@ -1,13 +1,14 @@
 package pro.nia.jdocker.ui.pages.images;
 
 import java.awt.BorderLayout;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -41,6 +42,9 @@ public class ImagesPage extends JPanel {
         this.add(_table.getTableHeader(), BorderLayout.PAGE_START);
         this.add(scrollPane, BorderLayout.CENTER);
 
+        // context menu
+        _make_cmenu();
+
         // start
         _refresh();
     }
@@ -49,7 +53,7 @@ public class ImagesPage extends JPanel {
         List<ImageList> images = _vm.get_images();
 
         // TODO: remove
-        images.stream().forEach(c -> System.out.println(c.created));
+        // images.stream().forEach(c -> System.out.println(c.created));
 
         _fill_list(images);
     }
@@ -124,5 +128,36 @@ public class ImagesPage extends JPanel {
 
         // кривой буржуйский формат...
         return time.toString();
+    }
+
+    void _make_cmenu() {
+        JPopupMenu menu = new JPopupMenu();
+
+        JMenuItem remove = new JMenuItem("remove");
+        remove.addActionListener((ActionEvent e) -> {
+            System.out.println("remove called");
+            System.out.println(e);
+
+            // Optionally, get the row and column clicked
+            // int row = _table.rowAtPoint(e.getPoint());
+            // int column = _table.columnAtPoint(e.getPoint());
+
+            // Select the row if it's not already selected (common for context menus)
+            // if (row != -1 && !jTable.isRowSelected(row)) {
+            // jTable.setRowSelectionInterval(row, row);
+            // }
+
+        });
+
+        JMenuItem remove_force = new JMenuItem("remove force");
+        remove_force.addActionListener(e -> {
+            System.out.println("remove force called");
+        });
+        menu.add(remove);
+
+        menu.add(remove_force);
+
+        _table.setComponentPopupMenu(menu);
+
     }
 }
