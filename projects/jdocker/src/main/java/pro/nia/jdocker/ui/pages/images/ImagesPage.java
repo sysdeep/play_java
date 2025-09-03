@@ -12,7 +12,7 @@ import org.tinylog.Logger;
 
 import pro.nia.jdocker.domine.models.ImageList;
 
-public class ImagesPage extends JPanel {
+public class ImagesPage extends JPanel implements RequestHandler {
     ImagesPageVM _vm;
     private ImagesTable _images_table;
     private JButton btn_refresh;
@@ -24,7 +24,7 @@ public class ImagesPage extends JPanel {
 
         add(new JLabel("Images"), BorderLayout.NORTH);
 
-        _images_table = new ImagesTable();
+        _images_table = new ImagesTable(this);
         add(_images_table, BorderLayout.CENTER);
 
         btn_refresh = new JButton("Refresh");
@@ -79,6 +79,13 @@ public class ImagesPage extends JPanel {
     void _fill_list(List<ImageList> images) {
 
         _images_table.set_images(images);
+    }
+
+    @Override
+    public void do_remove_image(String image_id) {
+        Logger.debug("do remove request: " + image_id);
+        _vm.remove_image(image_id, true);
+        _refresh();
     }
 
 }

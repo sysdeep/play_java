@@ -1,13 +1,10 @@
 package pro.nia.jdocker.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 
-import pro.nia.jdocker.domine.models.ContainerList;
 import pro.nia.jdocker.domine.models.ImageList;
 import pro.nia.jdocker.ui.pages.images.ImagesPageVM;
 
@@ -22,6 +19,11 @@ public class ImagesController implements ImagesPageVM {
     public List<ImageList> get_images() {
         List<Image> client_images = _docker_client.listImagesCmd().exec();
         return client_images.stream().map(i -> _to_model(i)).toList();
+    }
+
+    @Override
+    public void remove_image(String image_id, boolean force) {
+        _docker_client.removeImageCmd(image_id).withForce(force).exec();
     }
 
     static ImageList _to_model(Image data) {

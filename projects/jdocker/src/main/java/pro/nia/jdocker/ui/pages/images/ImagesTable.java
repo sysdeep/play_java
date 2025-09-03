@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -18,27 +19,33 @@ import pro.nia.jdocker.domine.models.ImageList;
 
 public class ImagesTable extends JPanel {
 
-  JTable _table;
-  DefaultTableModel _table_model;
+  private JTable _table;
+  private DefaultTableModel _table_model;
+  private RequestHandler _request_handler;
 
-  public ImagesTable() {
+  public ImagesTable(RequestHandler request_handler) {
+    this._request_handler = request_handler;
+
     setLayout(new BorderLayout());
 
+    // table
     _table_model = new DefaultTableModel();
     _table_model.addColumn("ID");
     _table_model.addColumn("Tags");
     _table_model.addColumn("Size");
     _table_model.addColumn("Created");
-    // _table_model.addColumn("Options");
-    _table = new JTable(_table_model);
 
+    _table = new JTable(_table_model);
+    this.add(_table.getTableHeader(), BorderLayout.PAGE_START);
+
+    // scroll panel
     JScrollPane scrollPane = new JScrollPane(_table);
     _table.setFillsViewportHeight(true);
-    this.add(_table.getTableHeader(), BorderLayout.PAGE_START);
     this.add(scrollPane, BorderLayout.CENTER);
 
     // context menu
     _make_cmenu();
+
   }
 
   public void set_images(List<ImageList> images) {
@@ -115,30 +122,41 @@ public class ImagesTable extends JPanel {
     return time.toString();
   }
 
+  /**
+   * сначала надо выбрать строку, и именно к этой строке применяются операции
+   */
   void _make_cmenu() {
     JPopupMenu menu = new JPopupMenu();
 
+    // remove
     JMenuItem remove = new JMenuItem("remove");
     remove.addActionListener((ActionEvent e) -> {
       System.out.println("remove called");
-      System.out.println(e);
 
-      // Optionally, get the row and column clicked
-      // int row = _table.rowAtPoint(e.getPoint());
-      // int column = _table.columnAtPoint(e.getPoint());
+      int currentRow = _table.getSelectedRow();
+      if (currentRow == -1) {
+        // Display the warning modal dialog
+        JOptionPane.showMessageDialog(
+            this, // Parent component (can be null to center on screen)
+            "No selected row!", // The message to display
+            "Warning", // The title of the dialog
+            JOptionPane.WARNING_MESSAGE // The message type (displays a warning icon)
+        );
+        return;
+      }
 
-      // Select the row if it's not already selected (common for context menus)
-      // if (row != -1 && !jTable.isRowSelected(row)) {
-      // jTable.setRowSelectionInterval(row, row);
-      // }
+      String v = _table_model.getValueAt(currentRow, 0).toString();
 
-    });
+      _request_handler.do_remove_image(v);
 
-    JMenuItem remove_force = new JMenuItem("remove force");
-    remove_force.addActionListener(e -> {
-      System.out.println("remove force called");
     });
     menu.add(remove);
+
+    // force remove
+    JMenuItem remove_force = new JMenuItem("remove force");
+    // remove_force.addActionListener(e -> {
+    // System.out.println("remove force called");
+    // });
 
     menu.add(remove_force);
 
