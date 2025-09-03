@@ -62,6 +62,8 @@ public class MainWindow extends JFrame {
         // _tabs.addTab("Networks", _containers_page);
         // _tabs.addTab("Configs", _containers_page);
         // _tabs.addTab("Secrets", _containers_page);
+        // TODO: remove
+        _tabs.setSelectedIndex(1);
 
         // actions bar --------------------------------------------------------
         _actions_bar = new ActionsBarView();

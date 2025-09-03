@@ -1,26 +1,21 @@
 package pro.nia.jdocker.ui.pages.images;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.SwingWorker;
 
-import org.apache.commons.io.FileUtils;
+import org.tinylog.Logger;
 
 import pro.nia.jdocker.domine.models.ImageList;
 
 public class ImagesPage extends JPanel {
     ImagesPageVM _vm;
-    JTable _table;
-    DefaultTableModel _table_model;
+    private ImagesTable _images_table;
+    private JButton btn_refresh;
 
     public ImagesPage(ImagesPageVM vm) {
         _vm = vm;
@@ -29,135 +24,61 @@ public class ImagesPage extends JPanel {
 
         add(new JLabel("Images"), BorderLayout.NORTH);
 
-        _table_model = new DefaultTableModel();
-        _table_model.addColumn("ID");
-        _table_model.addColumn("Tags");
-        _table_model.addColumn("Size");
-        _table_model.addColumn("Created");
-        // _table_model.addColumn("Options");
-        _table = new JTable(_table_model);
+        _images_table = new ImagesTable();
+        add(_images_table, BorderLayout.CENTER);
 
-        JScrollPane scrollPane = new JScrollPane(_table);
-        _table.setFillsViewportHeight(true);
-        this.add(_table.getTableHeader(), BorderLayout.PAGE_START);
-        this.add(scrollPane, BorderLayout.CENTER);
-
-        // context menu
-        _make_cmenu();
+        btn_refresh = new JButton("Refresh");
+        // btn_refresh.addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent e) {
+        // _refresh();
+        // }
+        // });
+        btn_refresh.addActionListener(e -> {
+            _refresh();
+        });
+        add(btn_refresh, BorderLayout.PAGE_END);
 
         // start
         _refresh();
     }
 
     void _refresh() {
-        List<ImageList> images = _vm.get_images();
 
-        // TODO: remove
-        // images.stream().forEach(c -> System.out.println(c.created));
+        Logger.debug("start images refreshing...");
+        btn_refresh.setEnabled(false);
 
-        _fill_list(images);
+        // async update
+        SwingWorker<List<ImageList>, Void> worker = new SwingWorker<List<ImageList>, Void>() {
+            @Override
+            protected List<ImageList> doInBackground() throws Exception {
+                System.out.println("start background task");
+                // Thread.sleep(3000);
+                List<ImageList> images = _vm.get_images();
+                System.out.println("end background task");
+                return images;
+            }
+
+            @Override
+            protected void done() {
+                // System.out.println("task done!!");
+                try {
+                    List<ImageList> images = get(); // Get the result from doInBackground()
+                    _fill_list(images);
+                } catch (Exception ex) {
+                    Logger.error("Task Failed: " + ex.getMessage());
+                } finally {
+                    btn_refresh.setEnabled(true);
+                }
+            }
+        };
+        worker.execute();
+
     }
 
     void _fill_list(List<ImageList> images) {
-        _table.clearSelection();
-        _table.removeAll();
 
-        for (ImageList data : images) {
-            for (Object[] image_row : _image_to_row(data)) {
-                _table_model.addRow(image_row);
-            }
-        }
+        _images_table.set_images(images);
     }
 
-    List<Object[]> _image_to_row(ImageList image) {
-        List<String> view_tags = new ArrayList<String>();
-
-        if (image.tags.length == 0) {
-            view_tags.add("no tags");
-        } else {
-            for (int i = 0; i < image.tags.length; i++) {
-                view_tags.add(image.tags[i]);
-            }
-        }
-
-        List<Object[]> result = new ArrayList<Object[]>();
-        for (String tag : view_tags) {
-            Object[] row = new Object[] {
-                    _make_short_id(image.id),
-                    tag,
-                    _hum_size(image.size),
-                    // Long.toString(image.size),
-                    _date(image.created),
-                    // Long.toString(image.created),
-            };
-            result.add(row);
-        }
-
-        return result;
-
-    }
-
-    static String _make_short_id(String id) {
-        String[] split_result = id.split(":");
-        if (split_result.length < 2) {
-            return id;
-        }
-
-        return split_result[1].substring(0, 12);
-    }
-
-    static String _hum_size(Long value) {
-        return FileUtils.byteCountToDisplaySize(value);
-    }
-
-    static String _date(Long value) {
-
-        // NOTE: multi to 1000 - msec
-        java.util.Date time = new java.util.Date(value * 1000);
-
-        // TODO: format
-        // LocalDate date = LocalDate.now();
-        // System.out.println(date.toString());
-        // System.out.println(time.toString());
-        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
-        // String text = date.format(formatter);
-        // System.out.println(text);
-
-        // DateFormat formatter = DateFormat.getDateTimeInstance();
-        // return formatter.format(this);
-
-        // кривой буржуйский формат...
-        return time.toString();
-    }
-
-    void _make_cmenu() {
-        JPopupMenu menu = new JPopupMenu();
-
-        JMenuItem remove = new JMenuItem("remove");
-        remove.addActionListener((ActionEvent e) -> {
-            System.out.println("remove called");
-            System.out.println(e);
-
-            // Optionally, get the row and column clicked
-            // int row = _table.rowAtPoint(e.getPoint());
-            // int column = _table.columnAtPoint(e.getPoint());
-
-            // Select the row if it's not already selected (common for context menus)
-            // if (row != -1 && !jTable.isRowSelected(row)) {
-            // jTable.setRowSelectionInterval(row, row);
-            // }
-
-        });
-
-        JMenuItem remove_force = new JMenuItem("remove force");
-        remove_force.addActionListener(e -> {
-            System.out.println("remove force called");
-        });
-        menu.add(remove);
-
-        menu.add(remove_force);
-
-        _table.setComponentPopupMenu(menu);
-
-    }
 }

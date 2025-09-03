@@ -1,14 +1,13 @@
 package pro.nia.jdocker;
 
-import java.util.List;
-
 import javax.swing.SwingUtilities;
+
+import org.tinylog.Logger;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
-import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 
@@ -22,6 +21,8 @@ import pro.nia.jdocker.ui.MainWindow;
 public class App {
     public static void main(String[] args) {
 
+        Logger.info("Starting application...");
+
         // setup controllers --------------------------------------------------
         AppController app_controller = new AppController(build_docker_client());
 
@@ -32,6 +33,14 @@ public class App {
         SwingUtilities.invokeLater(() -> {
             new MainWindow(app_controller);
         });
+
+        // SwingUtilities.invokeLater(new Runnable() {
+        // public void run() {
+        // new MainWindow(app_controller);
+        // }
+        // });
+        //
+
     }
 
     static DockerClient build_docker_client() {
@@ -48,12 +57,12 @@ public class App {
         DockerClient dockerClient = DockerClientImpl.getInstance(config, httpClient);
 
         dockerClient.pingCmd().exec();
-        List<Container> containers = dockerClient.listContainersCmd().exec();
-
-        containers.stream().forEach((c) -> System.out.println(c.getId()));
-        for (Container cnt : containers) {
-            System.out.println(cnt.getImage());
-        }
+        // List<Container> containers = dockerClient.listContainersCmd().exec();
+        //
+        // containers.stream().forEach((c) -> System.out.println(c.getId()));
+        // for (Container cnt : containers) {
+        // System.out.println(cnt.getImage());
+        // }
 
         return dockerClient;
     }

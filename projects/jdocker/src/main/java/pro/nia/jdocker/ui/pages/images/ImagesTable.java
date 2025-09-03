@@ -1,0 +1,149 @@
+package pro.nia.jdocker.ui.pages.images;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
+import org.apache.commons.io.FileUtils;
+
+import pro.nia.jdocker.domine.models.ImageList;
+
+public class ImagesTable extends JPanel {
+
+  JTable _table;
+  DefaultTableModel _table_model;
+
+  public ImagesTable() {
+    setLayout(new BorderLayout());
+
+    _table_model = new DefaultTableModel();
+    _table_model.addColumn("ID");
+    _table_model.addColumn("Tags");
+    _table_model.addColumn("Size");
+    _table_model.addColumn("Created");
+    // _table_model.addColumn("Options");
+    _table = new JTable(_table_model);
+
+    JScrollPane scrollPane = new JScrollPane(_table);
+    _table.setFillsViewportHeight(true);
+    this.add(_table.getTableHeader(), BorderLayout.PAGE_START);
+    this.add(scrollPane, BorderLayout.CENTER);
+
+    // context menu
+    _make_cmenu();
+  }
+
+  public void set_images(List<ImageList> images) {
+    _table.clearSelection();
+    _table.removeAll();
+    _table_model.setRowCount(0);
+
+    for (ImageList data : images) {
+      for (Object[] image_row : _image_to_row(data)) {
+        _table_model.addRow(image_row);
+      }
+    }
+
+  }
+
+  List<Object[]> _image_to_row(ImageList image) {
+    List<String> view_tags = new ArrayList<String>();
+
+    if (image.tags.length == 0) {
+      view_tags.add("no tags");
+    } else {
+      for (int i = 0; i < image.tags.length; i++) {
+        view_tags.add(image.tags[i]);
+      }
+    }
+
+    List<Object[]> result = new ArrayList<Object[]>();
+    for (String tag : view_tags) {
+      Object[] row = new Object[] {
+          _make_short_id(image.id),
+          tag,
+          _hum_size(image.size),
+          // Long.toString(image.size),
+          _date(image.created),
+          // Long.toString(image.created),
+      };
+      result.add(row);
+    }
+
+    return result;
+
+  }
+
+  static String _make_short_id(String id) {
+    String[] split_result = id.split(":");
+    if (split_result.length < 2) {
+      return id;
+    }
+
+    return split_result[1].substring(0, 12);
+  }
+
+  static String _hum_size(Long value) {
+    return FileUtils.byteCountToDisplaySize(value);
+  }
+
+  static String _date(Long value) {
+
+    // NOTE: multi to 1000 - msec
+    java.util.Date time = new java.util.Date(value * 1000);
+
+    // TODO: format
+    // LocalDate date = LocalDate.now();
+    // System.out.println(date.toString());
+    // System.out.println(time.toString());
+    // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
+    // String text = date.format(formatter);
+    // System.out.println(text);
+
+    // DateFormat formatter = DateFormat.getDateTimeInstance();
+    // return formatter.format(this);
+
+    // кривой буржуйский формат...
+    return time.toString();
+  }
+
+  void _make_cmenu() {
+    JPopupMenu menu = new JPopupMenu();
+
+    JMenuItem remove = new JMenuItem("remove");
+    remove.addActionListener((ActionEvent e) -> {
+      System.out.println("remove called");
+      System.out.println(e);
+
+      // Optionally, get the row and column clicked
+      // int row = _table.rowAtPoint(e.getPoint());
+      // int column = _table.columnAtPoint(e.getPoint());
+
+      // Select the row if it's not already selected (common for context menus)
+      // if (row != -1 && !jTable.isRowSelected(row)) {
+      // jTable.setRowSelectionInterval(row, row);
+      // }
+
+    });
+
+    JMenuItem remove_force = new JMenuItem("remove force");
+    remove_force.addActionListener(e -> {
+      System.out.println("remove force called");
+    });
+    menu.add(remove);
+
+    menu.add(remove_force);
+
+    _table.setComponentPopupMenu(menu);
+
+  }
+
+}
