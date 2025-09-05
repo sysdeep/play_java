@@ -13,9 +13,9 @@ import org.tinylog.Logger;
 import pro.nia.jdocker.domine.models.ImageList;
 
 public class ImagesPage extends JPanel implements RequestHandler {
-    ImagesPageVM _vm;
-    private ImagesTable _images_table;
-    private JButton btn_refresh;
+    private final ImagesPageVM _vm;
+    private final ImagesTable _images_table;
+    private final JButton btn_refresh;
 
     public ImagesPage(ImagesPageVM vm) {
         _vm = vm;
@@ -84,8 +84,9 @@ public class ImagesPage extends JPanel implements RequestHandler {
     @Override
     public void do_remove_image(String image_id) {
         Logger.debug("do remove request: " + image_id);
-        _vm.remove_image(image_id, true);
-        _refresh();
+//        _vm.remove_image(image_id, true);
+//        _refresh();
+        _vm.get_image(image_id);
     }
 
 }

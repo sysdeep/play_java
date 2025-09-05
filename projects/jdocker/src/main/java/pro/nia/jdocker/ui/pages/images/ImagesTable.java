@@ -3,6 +3,7 @@ package pro.nia.jdocker.ui.pages.images;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JMenuItem;
@@ -19,9 +20,9 @@ import pro.nia.jdocker.domine.models.ImageList;
 
 public class ImagesTable extends JPanel {
 
-  private JTable _table;
-  private DefaultTableModel _table_model;
-  private RequestHandler _request_handler;
+  private final JTable _table;
+  private final DefaultTableModel _table_model;
+  private final RequestHandler _request_handler;
 
   public ImagesTable(RequestHandler request_handler) {
     this._request_handler = request_handler;
@@ -67,9 +68,7 @@ public class ImagesTable extends JPanel {
     if (image.tags.length == 0) {
       view_tags.add("no tags");
     } else {
-      for (int i = 0; i < image.tags.length; i++) {
-        view_tags.add(image.tags[i]);
-      }
+        view_tags.addAll(Arrays.asList(image.tags));
     }
 
     List<Object[]> result = new ArrayList<Object[]>();
@@ -153,12 +152,12 @@ public class ImagesTable extends JPanel {
     menu.add(remove);
 
     // force remove
-    JMenuItem remove_force = new JMenuItem("remove force");
+//    JMenuItem remove_force = new JMenuItem("remove force");
     // remove_force.addActionListener(e -> {
     // System.out.println("remove force called");
     // });
 
-    menu.add(remove_force);
+//    menu.add(remove_force);
 
     _table.setComponentPopupMenu(menu);
 

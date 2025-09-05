@@ -5,7 +5,9 @@ import java.util.List;
 import pro.nia.jdocker.domine.models.ImageList;
 
 public interface ImagesPageVM {
-    public List<ImageList> get_images();
+    List<ImageList> get_images();
 
-    public void remove_image(String image_id, boolean force);
+    void remove_image(String image_id, boolean force);
+    void get_image(String image_id);
+
 }

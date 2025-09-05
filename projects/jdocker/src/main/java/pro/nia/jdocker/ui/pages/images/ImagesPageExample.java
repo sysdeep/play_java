@@ -50,4 +50,14 @@ class ImagesVMMock implements ImagesPageVM {
 
         return result;
     }
+
+    @Override
+    public void remove_image(String image_id, boolean force) {
+
+    }
+
+    @Override
+    public void get_image(String image_id) {
+
+    }
 }
