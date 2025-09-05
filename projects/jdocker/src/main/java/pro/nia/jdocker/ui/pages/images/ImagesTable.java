@@ -68,7 +68,7 @@ public class ImagesTable extends JPanel {
     if (image.tags.length == 0) {
       view_tags.add("no tags");
     } else {
-        view_tags.addAll(Arrays.asList(image.tags));
+      view_tags.addAll(Arrays.asList(image.tags));
     }
 
     List<Object[]> result = new ArrayList<Object[]>();
@@ -151,13 +151,37 @@ public class ImagesTable extends JPanel {
     });
     menu.add(remove);
 
+    // show
+    JMenuItem inspect = new JMenuItem("inspect");
+    inspect.addActionListener((ActionEvent e) -> {
+      System.out.println("inspect called");
+
+      int currentRow = _table.getSelectedRow();
+      if (currentRow == -1) {
+        // Display the warning modal dialog
+        JOptionPane.showMessageDialog(
+            this, // Parent component (can be null to center on screen)
+            "No selected row!", // The message to display
+            "Warning", // The title of the dialog
+            JOptionPane.WARNING_MESSAGE // The message type (displays a warning icon)
+        );
+        return;
+      }
+
+      String v = _table_model.getValueAt(currentRow, 0).toString();
+
+      _request_handler.do_show_image(v);
+
+    });
+    menu.add(inspect);
+
     // force remove
-//    JMenuItem remove_force = new JMenuItem("remove force");
+    // JMenuItem remove_force = new JMenuItem("remove force");
     // remove_force.addActionListener(e -> {
     // System.out.println("remove force called");
     // });
 
-//    menu.add(remove_force);
+    // menu.add(remove_force);
 
     _table.setComponentPopupMenu(menu);
 

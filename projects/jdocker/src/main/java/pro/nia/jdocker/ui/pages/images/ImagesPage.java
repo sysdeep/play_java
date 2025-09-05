@@ -84,8 +84,14 @@ public class ImagesPage extends JPanel implements RequestHandler {
     @Override
     public void do_remove_image(String image_id) {
         Logger.debug("do remove request: " + image_id);
-//        _vm.remove_image(image_id, true);
-//        _refresh();
+        _vm.remove_image(image_id, true);
+        _refresh();
+    }
+
+    @Override
+    public void do_show_image(String image_id) {
+        Logger.debug("do show request: " + image_id);
+
         _vm.get_image(image_id);
     }
 
