@@ -11,14 +11,23 @@ import javax.swing.SwingWorker;
 import org.tinylog.Logger;
 
 import pro.nia.jdocker.domine.models.ImageList;
+// import pro.nia.jdocker.ui.pages.image.ImageDialog;
+import pro.nia.jdocker.ui.UiCtx;
 
 public class ImagesPage extends JPanel implements RequestHandler {
     private final ImagesPageVM _vm;
     private final ImagesTable _images_table;
     private final JButton btn_refresh;
+    // private final ImageDialog _image_dialog;
+    private UiCtx _ui_ctx;
 
-    public ImagesPage(ImagesPageVM vm) {
+    public ImagesPage(ImagesPageVM vm, UiCtx ui_ctx) {
         _vm = vm;
+        _ui_ctx = ui_ctx;
+
+        // ImageDialog _image_dialog = new ImageDialog(this, "Modal Dialog Example",
+        // true);
+        // _image_dialog.setVisible(true); // Show the modal dialog
 
         setLayout(new BorderLayout());
 
@@ -92,7 +101,10 @@ public class ImagesPage extends JPanel implements RequestHandler {
     public void do_show_image(String image_id) {
         Logger.debug("do show request: " + image_id);
 
-        _vm.get_image(image_id);
+        _ui_ctx.show_image(image_id);
+
+        // _image_dialog = new ImageDialog(this, "Modal Dialog Example", true);
+        // _image_dialog.setVisible(true); // Show the modal dialog
     }
 
 }

@@ -10,3 +10,9 @@ main_window:
 
 images_page:
 	mvn compile exec:java -Dexec.mainClass="pro.nia.jdocker.ui.pages.images.ImagesPageExample"
+
+image_frame:
+	mvn compile exec:java -Dexec.mainClass="pro.nia.jdocker.ui.pages.image.ImageFrame"
+
+image_dialog:
+	mvn compile exec:java -Dexec.mainClass="pro.nia.jdocker.ui.pages.image.ImageDialog"

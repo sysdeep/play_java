@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 
 import pro.nia.jdocker.controller.AppController;
 import pro.nia.jdocker.ui.pages.containers.ContainersPage;
+import pro.nia.jdocker.ui.pages.image.ImageDialog;
 import pro.nia.jdocker.ui.pages.images.ImagesPage;
 
 import java.awt.BorderLayout;
@@ -19,7 +20,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements UiCtx {
     private String title_prefix = "JDocker";
     // IController _controller;
     ToolbarView _toolbar;
@@ -34,6 +35,7 @@ public class MainWindow extends JFrame {
 
     public MainWindow(AppController app_controller) {
 
+        // TODO: use docker service
         // controller
         _app_controller = app_controller;
 
@@ -57,7 +59,7 @@ public class MainWindow extends JFrame {
 
         _containers_page = new ContainersPage(_app_controller.get_containers_controller());
         _tabs.addTab("Containers", _containers_page);
-        _tabs.addTab("Images", new ImagesPage(_app_controller.get_images_controller()));
+        _tabs.addTab("Images", new ImagesPage(_app_controller.get_images_controller(), this));
         // _tabs.addTab("Volumes", _containers_page);
         // _tabs.addTab("Networks", _containers_page);
         // _tabs.addTab("Configs", _containers_page);
@@ -76,6 +78,7 @@ public class MainWindow extends JFrame {
 
         pack();
         setVisible(true);
+
     }
 
     // запуск оконного приложения
@@ -140,5 +143,14 @@ public class MainWindow extends JFrame {
 
             // new MainWindow(new AppController());
         });
+    }
+
+    @Override
+    public void show_image(String image_id) {
+        _app_controller.get_images_controller().get_image(image_id);
+
+        ImageDialog dialog = new ImageDialog(this, "Modal Dialog Example", false);
+        dialog.setVisible(true); // Show the modal dialog
+
     }
 }

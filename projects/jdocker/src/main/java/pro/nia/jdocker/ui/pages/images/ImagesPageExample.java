@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
 
+import pro.nia.jdocker.domine.models.Image;
 import pro.nia.jdocker.domine.models.ImageList;
+import pro.nia.jdocker.ui.UiCtx;
 
 public class ImagesPageExample {
     public static void main(String[] args) {
@@ -18,7 +20,7 @@ public class ImagesPageExample {
 
         SwingUtilities.invokeLater(() -> {
             JFrame window = new JFrame();
-            ImagesPage view = new ImagesPage(ctrl);
+            ImagesPage view = new ImagesPage(ctrl, new ImagesHandlerMock());
 
             window.add(view);
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,6 +29,15 @@ public class ImagesPageExample {
             window.setVisible(true);
 
         });
+    }
+}
+
+class ImagesHandlerMock implements UiCtx {
+
+    @Override
+    public void show_image(String image_id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'on_show_image'");
     }
 }
 
@@ -57,7 +68,7 @@ class ImagesVMMock implements ImagesPageVM {
     }
 
     @Override
-    public void get_image(String image_id) {
-
+    public Image get_image(String image_id) {
+        return new Image();
     }
 }
