@@ -1,4 +1,4 @@
-package pro.nia.jdocker.ui.pages.image;
+package pro.nia.jdocker.ui.components.image_frame;
 
 import java.awt.GridLayout;
 
@@ -35,6 +35,10 @@ Created	2025-08-25 11:49:09
 */
 public class DetailsFrame extends JPanel {
 
+  private final JLabel _id_label;
+  private final JLabel _created_label;
+  private final JLabel _size_label;
+
   public DetailsFrame(Image image) {
 
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -54,15 +58,25 @@ public class DetailsFrame extends JPanel {
     // add(new JLabel("label: " + i));
     // }
 
+    _id_label = new JLabel("--");
+    _created_label = new JLabel("--");
+    _size_label = new JLabel("--");
+
     _grid.add(new JLabel("ID"));
-    _grid.add(new JLabel(image.id));
+    _grid.add(_id_label);
 
     _grid.add(new JLabel("Created"));
-    _grid.add(new JLabel("TODO"));
+    _grid.add(_created_label);
 
     _grid.add(new JLabel("Size"));
-    _grid.add(new JLabel("TODO"));
+    _grid.add(_size_label);
 
     add(_grid);
+  }
+
+  public void set_image(Image image) {
+    _id_label.setText(image.id);
+    _created_label.setText("CREATED TODO");
+    _size_label.setText("SIZE TODO");
   }
 }

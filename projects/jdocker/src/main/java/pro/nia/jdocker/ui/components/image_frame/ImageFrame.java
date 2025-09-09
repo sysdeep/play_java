@@ -1,4 +1,4 @@
-package pro.nia.jdocker.ui.pages.image;
+package pro.nia.jdocker.ui.components.image_frame;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -53,6 +53,10 @@ public class ImageFrame extends JPanel {
     add(_details_frame);
 
     add(new JLabel("Image frame"));
+  }
+
+  public void set_image(Image image) {
+    _details_frame.set_image(image);
   }
 
   public static void main(String[] args) {

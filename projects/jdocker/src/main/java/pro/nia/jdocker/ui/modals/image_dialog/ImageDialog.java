@@ -1,21 +1,32 @@
-package pro.nia.jdocker.ui.pages.image;
+package pro.nia.jdocker.ui.modals.image_dialog;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.Dimension;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import pro.nia.jdocker.domine.models.Image;
+import pro.nia.jdocker.domine.models.ImageList;
+import pro.nia.jdocker.services.docker.DockerService;
+import pro.nia.jdocker.services.docker.DockerServiceInterface;
+import pro.nia.jdocker.ui.components.image_frame.ImageFrame;
+import pro.nia.jdocker.utils.DockerClientBuilder;
 
 public class ImageDialog extends JDialog {
-  private ImageFrame _image_frame;
+  private final ImageFrame _image_frame;
+  private final DockerServiceInterface _docker_service;
+  private final String _image_id;
 
-  public ImageDialog(Frame owner, String title, boolean modal) {
-    super(owner, title, modal);
+  public ImageDialog(Frame owner, DockerServiceInterface docker_service, String image_id) {
+    super(owner, "Image modal", false);
+
+    _docker_service = docker_service;
+    _image_id = image_id;
 
     // Add components to the dialog
 
@@ -34,6 +45,13 @@ public class ImageDialog extends JDialog {
     pack();
     setLocationRelativeTo(owner); // Center relative to owner
     setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+    // start ----------------------------------------------
+    Image doimage = _docker_service.get_images_service().get_image(image_id);
+    System.out.println("===========================");
+    System.out.println(doimage);
+    System.out.println("===========================");
+    _image_frame.set_image(doimage);
   }
 
   public static void main(String[] args) {
@@ -44,13 +62,22 @@ public class ImageDialog extends JDialog {
     frame.setSize(400, 300);
     frame.setLayout(new FlowLayout());
 
+    // service ----------------------------------------------------------------
+    DockerService docker_service = new DockerService(DockerClientBuilder.build_docker_client());
+    List<ImageList> images = docker_service.get_images_service().get_images();
+    // if (images.isEmpty()) {
+    //
+    // }
+
     JButton openDialogButton = new JButton("Open Modal Dialog");
     openDialogButton.addActionListener(e -> {
-      ImageDialog dialog = new ImageDialog(frame, "Modal Dialog Example", true);
+      ImageDialog dialog = new ImageDialog(frame, docker_service, images.get(0).id);
       dialog.setVisible(true); // Show the modal dialog
     });
     frame.add(openDialogButton);
 
     frame.setVisible(true);
+
+    openDialogButton.doClick();
   }
 }

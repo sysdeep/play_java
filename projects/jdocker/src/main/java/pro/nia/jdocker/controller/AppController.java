@@ -4,18 +4,13 @@ import com.github.dockerjava.api.DockerClient;
 
 public class AppController {
     ContainersController _containers;
-    ImagesService _images;
 
     public AppController(DockerClient docker_client) {
         _containers = new ContainersController(docker_client);
-        _images = new ImagesService(docker_client);
     }
 
     public ContainersController get_containers_controller() {
         return _containers;
     }
 
-    public ImagesService get_images_controller() {
-        return _images;
-    }
 }

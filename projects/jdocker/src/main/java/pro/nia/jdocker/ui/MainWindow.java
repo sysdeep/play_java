@@ -1,24 +1,23 @@
 package pro.nia.jdocker.ui;
 
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
-import pro.nia.jdocker.controller.AppController;
+import pro.nia.jdocker.services.docker.DockerServiceInterface;
+import pro.nia.jdocker.ui.modals.image_dialog.ImageDialog;
 import pro.nia.jdocker.ui.pages.containers.ContainersPage;
-import pro.nia.jdocker.ui.pages.image.ImageDialog;
 import pro.nia.jdocker.ui.pages.images.ImagesPage;
-
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 
 public class MainWindow extends JFrame implements UiCtx {
     private String title_prefix = "JDocker";
@@ -31,9 +30,9 @@ public class MainWindow extends JFrame implements UiCtx {
     ContainersPage _containers_page;
     // ImagesPage _images_page;
 
-    AppController _app_controller;
+    DockerServiceInterface _app_controller;
 
-    public MainWindow(AppController app_controller) {
+    public MainWindow(DockerServiceInterface app_controller) {
 
         // TODO: use docker service
         // controller
@@ -57,15 +56,16 @@ public class MainWindow extends JFrame implements UiCtx {
         _tabs = new JTabbedPane();
         container.add(_tabs, BorderLayout.CENTER);
 
-        _containers_page = new ContainersPage(_app_controller.get_containers_controller());
-        _tabs.addTab("Containers", _containers_page);
-        _tabs.addTab("Images", new ImagesPage(_app_controller.get_images_controller(), this));
+        // _containers_page = new
+        // ContainersPage(_app_controller.get_containers_controller());
+        // _tabs.addTab("Containers", _containers_page);
+        _tabs.addTab("Images", new ImagesPage(_app_controller.get_images_service(), this));
         // _tabs.addTab("Volumes", _containers_page);
         // _tabs.addTab("Networks", _containers_page);
         // _tabs.addTab("Configs", _containers_page);
         // _tabs.addTab("Secrets", _containers_page);
         // TODO: remove
-        _tabs.setSelectedIndex(1);
+        _tabs.setSelectedIndex(0);
 
         // actions bar --------------------------------------------------------
         _actions_bar = new ActionsBarView();
@@ -147,9 +147,9 @@ public class MainWindow extends JFrame implements UiCtx {
 
     @Override
     public void show_image(String image_id) {
-        _app_controller.get_images_controller().get_image(image_id);
+        _app_controller.get_images_service().get_image(image_id);
 
-        ImageDialog dialog = new ImageDialog(this, "Modal Dialog Example", false);
+        ImageDialog dialog = new ImageDialog(this, _app_controller, image_id);
         dialog.setVisible(true); // Show the modal dialog
 
     }

@@ -11,17 +11,17 @@ import javax.swing.SwingWorker;
 import org.tinylog.Logger;
 
 import pro.nia.jdocker.domine.models.ImageList;
-// import pro.nia.jdocker.ui.pages.image.ImageDialog;
+import pro.nia.jdocker.services.docker.ImagesServiceInterface;
 import pro.nia.jdocker.ui.UiCtx;
 
 public class ImagesPage extends JPanel implements RequestHandler {
-    private final ImagesPageVM _vm;
+    private final ImagesServiceInterface _vm;
     private final ImagesTable _images_table;
     private final JButton btn_refresh;
     // private final ImageDialog _image_dialog;
     private UiCtx _ui_ctx;
 
-    public ImagesPage(ImagesPageVM vm, UiCtx ui_ctx) {
+    public ImagesPage(ImagesServiceInterface vm, UiCtx ui_ctx) {
         _vm = vm;
         _ui_ctx = ui_ctx;
 

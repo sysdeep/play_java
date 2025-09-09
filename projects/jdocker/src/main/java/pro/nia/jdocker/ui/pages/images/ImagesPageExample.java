@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 
 import pro.nia.jdocker.domine.models.Image;
 import pro.nia.jdocker.domine.models.ImageList;
+import pro.nia.jdocker.services.docker.ImagesServiceInterface;
 import pro.nia.jdocker.ui.UiCtx;
 
 public class ImagesPageExample {
@@ -41,7 +42,7 @@ class ImagesHandlerMock implements UiCtx {
     }
 }
 
-class ImagesVMMock implements ImagesPageVM {
+class ImagesVMMock implements ImagesServiceInterface {
 
     @Override
     public List<ImageList> get_images() {
