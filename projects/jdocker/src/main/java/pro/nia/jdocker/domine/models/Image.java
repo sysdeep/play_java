@@ -3,7 +3,7 @@ package pro.nia.jdocker.domine.models;
 public class Image {
   public String id;
   public String created;
-  public int Size;
+  public Long size;
   public String[] tags;
 }
 

@@ -45,6 +45,8 @@ public class ImagesService implements ImagesServiceInterface {
   static pro.nia.jdocker.domine.models.Image to_image(InspectImageResponse r) {
     pro.nia.jdocker.domine.models.Image d = new pro.nia.jdocker.domine.models.Image();
     d.id = r.getId();
+    d.created = r.getCreated();
+    d.size = r.getSize();
 
     return d;
   }

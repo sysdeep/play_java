@@ -1,5 +1,6 @@
 package pro.nia.jdocker.ui.components.image_frame;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -49,10 +50,13 @@ public class ImageFrame extends JPanel {
 
   public ImageFrame(Image image) {
 
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+    add(new JLabel("Image frame"));
+
     _details_frame = new DetailsFrame(image);
     add(_details_frame);
 
-    add(new JLabel("Image frame"));
   }
 
   public void set_image(Image image) {

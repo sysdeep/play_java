@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.commons.io.FileUtils;
 
 import pro.nia.jdocker.domine.models.ImageList;
+import pro.nia.jdocker.helpers.DockerHelper;
 
 public class ImagesTable extends JPanel {
 
@@ -74,11 +75,11 @@ public class ImagesTable extends JPanel {
     List<Object[]> result = new ArrayList<Object[]>();
     for (String tag : view_tags) {
       Object[] row = new Object[] {
-          _make_short_id(image.id),
+          DockerHelper.make_short_id(image.id),
           tag,
-          _hum_size(image.size),
+          DockerHelper.humanize_size(image.size),
           // Long.toString(image.size),
-          _date(image.created),
+          DockerHelper.timestamp_2_date(image.created),
           // Long.toString(image.created),
       };
       result.add(row);
@@ -86,39 +87,6 @@ public class ImagesTable extends JPanel {
 
     return result;
 
-  }
-
-  static String _make_short_id(String id) {
-    String[] split_result = id.split(":");
-    if (split_result.length < 2) {
-      return id;
-    }
-
-    return split_result[1].substring(0, 12);
-  }
-
-  static String _hum_size(Long value) {
-    return FileUtils.byteCountToDisplaySize(value);
-  }
-
-  static String _date(Long value) {
-
-    // NOTE: multi to 1000 - msec
-    java.util.Date time = new java.util.Date(value * 1000);
-
-    // TODO: format
-    // LocalDate date = LocalDate.now();
-    // System.out.println(date.toString());
-    // System.out.println(time.toString());
-    // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
-    // String text = date.format(formatter);
-    // System.out.println(text);
-
-    // DateFormat formatter = DateFormat.getDateTimeInstance();
-    // return formatter.format(this);
-
-    // кривой буржуйский формат...
-    return time.toString();
   }
 
   /**
