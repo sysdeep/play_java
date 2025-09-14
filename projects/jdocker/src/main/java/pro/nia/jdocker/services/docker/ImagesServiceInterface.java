@@ -2,7 +2,8 @@ package pro.nia.jdocker.services.docker;
 
 import java.util.List;
 
-import pro.nia.jdocker.domine.models.Image;
+import com.github.dockerjava.api.command.InspectImageResponse;
+
 import pro.nia.jdocker.domine.models.ImageList;
 
 public interface ImagesServiceInterface {
@@ -10,6 +11,6 @@ public interface ImagesServiceInterface {
 
   void remove_image(String image_id, boolean force);
 
-  Image get_image(String image_id);
+  InspectImageResponse get_image(String image_id);
 
 }

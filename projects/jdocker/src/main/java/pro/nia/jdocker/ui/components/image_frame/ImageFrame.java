@@ -1,14 +1,18 @@
 package pro.nia.jdocker.ui.components.image_frame;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 import pro.nia.jdocker.domine.models.Image;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import com.github.dockerjava.api.command.InspectImageResponse;
 
 /*
  *
@@ -47,19 +51,23 @@ Actions:
 */
 public class ImageFrame extends JPanel {
   private DetailsFrame _details_frame;
+  private JTabbedPane _tabs;
 
   public ImageFrame(Image image) {
 
-    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-    add(new JLabel("Image frame"));
+    setLayout(new BorderLayout());
 
     _details_frame = new DetailsFrame(image);
-    add(_details_frame);
+
+    _tabs = new JTabbedPane();
+    add(_tabs, BorderLayout.CENTER);
+
+    _tabs.addTab("Main", _details_frame);
+    _tabs.addTab("History", new JLabel("History"));
 
   }
 
-  public void set_image(Image image) {
+  public void set_image(InspectImageResponse image) {
     _details_frame.set_image(image);
   }
 

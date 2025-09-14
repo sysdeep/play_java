@@ -6,6 +6,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.github.dockerjava.api.command.InspectImageResponse;
+
 import pro.nia.jdocker.domine.models.Image;
 import pro.nia.jdocker.helpers.DockerHelper;
 
@@ -75,9 +77,9 @@ public class DetailsFrame extends JPanel {
     add(_grid);
   }
 
-  public void set_image(Image image) {
-    _id_label.setText(DockerHelper.make_short_id(image.id));
-    _created_label.setText(image.created);
-    _size_label.setText(DockerHelper.humanize_size(image.size));
+  public void set_image(InspectImageResponse image) {
+    _id_label.setText(DockerHelper.make_short_id(image.getId()));
+    _created_label.setText(image.getCreated());
+    _size_label.setText(DockerHelper.humanize_size(image.getSize()));
   }
 }

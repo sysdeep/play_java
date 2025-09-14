@@ -27,10 +27,13 @@ public class ImagesService implements ImagesServiceInterface {
   }
 
   @Override
-  public pro.nia.jdocker.domine.models.Image get_image(String image_id) {
+  public InspectImageResponse get_image(String image_id) {
+
     InspectImageResponse result = _docker_client.inspectImageCmd(image_id).exec();
-    System.out.println(result);
-    return ImagesService.to_image(result);
+    // System.out.println(result);
+    // return ImagesService.to_image(result);
+
+    return result;
   }
 
   static ImageList _to_model(Image data) {
@@ -42,13 +45,15 @@ public class ImagesService implements ImagesServiceInterface {
     return result;
   }
 
-  static pro.nia.jdocker.domine.models.Image to_image(InspectImageResponse r) {
-    pro.nia.jdocker.domine.models.Image d = new pro.nia.jdocker.domine.models.Image();
-    d.id = r.getId();
-    d.created = r.getCreated();
-    d.size = r.getSize();
-
-    return d;
-  }
+  // static pro.nia.jdocker.domine.models.Image to_image(InspectImageResponse r) {
+  // pro.nia.jdocker.domine.models.Image d = new
+  // pro.nia.jdocker.domine.models.Image();
+  // d.id = r.getId();
+  // d.created = r.getCreated();
+  // d.size = r.getSize();
+  //
+  //
+  // return d;
+  // }
 
 }

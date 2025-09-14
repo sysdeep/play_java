@@ -9,6 +9,9 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import com.github.dockerjava.api.command.InspectImageResponse;
 
 import pro.nia.jdocker.domine.models.Image;
 import pro.nia.jdocker.domine.models.ImageList;
@@ -39,17 +42,24 @@ public class ImageDialog extends JDialog {
     add(_image_frame, BorderLayout.CENTER);
 
     // toolbar --------------------------------------------
+    JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    add(toolbar, BorderLayout.SOUTH);
+
     JButton closeButton = new JButton("Close");
     closeButton.addActionListener(e -> dispose()); // Close the dialog on button click
-    add(closeButton, BorderLayout.SOUTH);
+    toolbar.add(closeButton);
+
+    //
     pack();
     setLocationRelativeTo(owner); // Center relative to owner
     setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
     // start ----------------------------------------------
-    Image doimage = _docker_service.get_images_service().get_image(image_id);
+    InspectImageResponse doimage = _docker_service.get_images_service().get_image(image_id);
     System.out.println("===========================");
     System.out.println(doimage);
+    System.out.println(doimage.getConfig());
+    System.out.println(doimage.getRawValues());
     System.out.println("===========================");
     _image_frame.set_image(doimage);
   }
