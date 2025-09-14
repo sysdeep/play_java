@@ -1,14 +1,12 @@
 
-
 compile:
-	# javac ./src/First.java ./src/ui/*.java -d target/classes
-	javac ./src/ui/*.java -d target/classes
+	mvn compile
 
-# run:
-# 	java -cp target/classes/ First
+run:
+	mvn compile exec:java -Dexec.mainClass="pro.comcon.App"
 
-status_panel_example:
-	java -cp target/classes/ ui.StatusPanelExample
 
-main_window:
-	java -cp target/classes/ ui.MainWindow
+dsensor_view:
+	mvn compile exec:java -Dexec.mainClass="pro.comcon.nui.views.dsensor.SensorExample"
+
+
