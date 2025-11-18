@@ -26,6 +26,9 @@ public class LampExample {
             Lamp sensor_1 = new Lamp(10);
             f.add(sensor_1, BorderLayout.CENTER);
 
+            // Rect rect = new Rect();
+            // f.add(rect, BorderLayout.CENTER);
+
             // Lamp sensor_2 = new Lamp(40);
             // f.add(sensor_2);
 
@@ -37,7 +40,7 @@ public class LampExample {
             });
 
             JButton colorButton = new JButton("Color");
-            colorButton.addActionListener(e -> sensor_1.set_color("null"));
+            // colorButton.addActionListener(e -> sensor_1.set_color("null"));
 
             controls.add(colorButton);
             controls.add(new JButton("State"));
