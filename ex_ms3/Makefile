@@ -14,3 +14,6 @@ dsensor_view:
 view_lamp:
 	mvn compile exec:java -Dexec.mainClass="pro.comcon.nui.views.lamp.LampExample"
 
+2d:
+	mvn compile exec:java -Dexec.mainClass="pro.comcon.ddraw.Main"
+
