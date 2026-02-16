@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -15,17 +16,20 @@ public class Scene extends JPanel implements Runnable {
     Thread loopThread;
     int FPS = 60;
 
-    GItem[] items;
+    // GItem[] items;
+    ArrayList<GItem> items;
 
     public Scene() {
         setPreferredSize(new Dimension(800, 600));
         setBackground(Color.black);
         setDoubleBuffered(true);
 
-        items = new GItem[1];
+        items = new ArrayList<GItem>();
+        items.add(new LampView());
+        items.add(new LampView());
 
-        items[0] = new LampView();
-
+        items.get(0).setPos(120, 20);
+        items.get(1).setPos(50, 50);
     }
 
     public void start() {
@@ -124,8 +128,8 @@ public class Scene extends JPanel implements Runnable {
 
         Graphics2D g2 = (Graphics2D) g;
 
-        g2.setColor(Color.white);
-        g2.fillRect(100, 100, 40, 40);
+        // g2.setColor(Color.white);
+        // g2.fillRect(100, 100, 40, 40);
 
         for (GItem item : items) {
             item.draw(g2);
